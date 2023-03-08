@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Billing System</title>
+  </head>
+  <body>
+    <h1>Srivalli General Store Billing </h1>
+    <form>
+      <h2>Enter Product Information</h2>
+      <label for="product_name">Product Name:</label>
+      <input type="text" id="product_name" name="product_name"><br><br>
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" name="quantity"><br><br>
+      <label for="price">Price:</label>
+      <input type="number" id="price" name="price"><br><br>
+      <input type="button" value="Add Product" onclick="addProduct()">
+    </form>
+    <h2>Bill</h2>
+    <table id="bill_table">
+      <tr>
+        <th>item</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Total</th>
+      </tr>
+    </table>
+    <br><br>
+    <p>Total: <span id="total_amount"></span></p>
+    <br><br>
+    <button onclick="shareBill()">Share Bill</button>
+  </body>
+  <script>
+    let bill = [];
+    let totalAmount = 0;
+  
+    function addProduct() {
+      let productName = document.getElementById("product_name").value;
+      let quantity = document.getElementById("quantity").value;
+      let price = document.getElementById("price").value;
+      let productTotal = quantity * price;
+  
+      let row = `<tr>
+                  <td>${productName}</td>
+                  <td>${quantity}</td>
+                  <td>${price}</td>
+                  <td>${productTotal}</td>
+                </tr>`;
+  
+      document.getElementById("bill_table").innerHTML += row;
+      bill.push({
+        name: productName,
+        quantity: quantity,
+        price: price,
+        total: productTotal
+      });
+      totalAmount += productTotal;
+      document.getElementById("total_amount").innerHTML = totalAmount;
+    }
+  
+    function shareBill() {
+      let billText = "Kirana and General Store Bill\n\n";
+      billText += "item\t \t Qty\t \tPrice\t \tTotal\n";
+      bill.forEach(function(product) {
+        billText += `${product.name}\t\t\t\t${product.quantity}\t\t\t\t${product.price}\t\t\t\t${product.total}\n`;
+      });
+      billText += `\nTotal: ${totalAmount}`;
+      window.location.href = "whatsapp://send?text=" + encodeURIComponent(billText);
+    }
+  </script>
+</html>
